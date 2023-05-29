@@ -31,7 +31,7 @@ class Subscription<T extends ParseObject> {
   }
 }
 
-enum LiveQueryClientEvent { connected, disconnected, userDisconnected }
+enum LiveQueryClientEvent { CONNECTED, DISCONNECTED, USER_DISCONNECTED }
 
 class LiveQueryReconnectingController {
   LiveQueryReconnectingController(
@@ -50,16 +50,16 @@ class LiveQueryReconnectingController {
     }
     _eventStream.listen((LiveQueryClientEvent event) {
       switch (event) {
-        case LiveQueryClientEvent.connected:
+        case LiveQueryClientEvent.CONNECTED:
           _isConnected = true;
           _retryState = 0;
           _userDisconnected = false;
           break;
-        case LiveQueryClientEvent.disconnected:
+        case LiveQueryClientEvent.DISCONNECTED:
           _isConnected = false;
           _setReconnect();
           break;
-        case LiveQueryClientEvent.userDisconnected:
+        case LiveQueryClientEvent.USER_DISCONNECTED:
           _userDisconnected = true;
           Timer? currentTimer = _currentTimer;
           if (currentTimer != null) {
@@ -70,14 +70,14 @@ class LiveQueryReconnectingController {
       }
 
       if (debug) {
-        print('$debugTag: $event');
+        print('$DEBUG_TAG: $event');
       }
     });
     ParseCoreData().appResumedStream?.listen((void _) => _setReconnect());
   }
 
   static List<int> get retryInterval => ParseCoreData().liveListRetryIntervals;
-  static const String debugTag = 'LiveQueryReconnectingController';
+  static const String DEBUG_TAG = 'LiveQueryReconnectingController';
 
   final Function _reconnect;
   final Stream<LiveQueryClientEvent> _eventStream;
@@ -99,7 +99,7 @@ class LiveQueryReconnectingController {
       _isConnected = false;
     }
     if (debug) {
-      print('$debugTag: $state');
+      print('$DEBUG_TAG: $state');
     }
     _setReconnect();
   }
@@ -116,7 +116,7 @@ class LiveQueryReconnectingController {
         _reconnect();
       });
       if (debug) {
-        print('$debugTag: Retry timer set to ${retryInterval[_retryState]}ms');
+        print('$DEBUG_TAG: Retrytimer set to ${retryInterval[_retryState]}ms');
       }
       if (_retryState < retryInterval.length - 1) {
         _retryState++;
@@ -188,13 +188,13 @@ class LiveQueryClient {
     if (webSocket != null) {
       return webSocket.readyState;
     }
-    return parse_web_socket.WebSocket.connecting;
+    return parse_web_socket.WebSocket.CONNECTING;
   }
 
   Future<dynamic> disconnect({bool userInitialized = false}) async {
     parse_web_socket.WebSocket? webSocket = _webSocket;
     if (webSocket != null &&
-        webSocket.readyState == parse_web_socket.WebSocket.open) {
+        webSocket.readyState == parse_web_socket.WebSocket.OPEN) {
       if (_debug) {
         print('$_printConstLiveQuery: Socket closed');
       }
@@ -215,7 +215,7 @@ class LiveQueryClient {
     _connecting = false;
     if (userInitialized) {
       _clientEventStreamController.sink
-          .add(LiveQueryClientEvent.userDisconnected);
+          .add(LiveQueryClientEvent.USER_DISCONNECTED);
     }
   }
 
@@ -224,7 +224,7 @@ class LiveQueryClient {
       {T? copyObject}) async {
     if (_webSocket == null) {
       await _clientEventStream.any((LiveQueryClientEvent event) =>
-          event == LiveQueryClientEvent.connected);
+          event == LiveQueryClientEvent.CONNECTED);
     }
     final int requestId = _requestIdGenerator();
     final Subscription<T> subscription =
@@ -272,7 +272,7 @@ class LiveQueryClient {
           await parse_web_socket.WebSocket.connect(_liveQueryURL);
       _webSocket = webSocket;
       _connecting = false;
-      if (webSocket.readyState == parse_web_socket.WebSocket.open) {
+      if (webSocket.readyState == parse_web_socket.WebSocket.OPEN) {
         if (_debug) {
           print('$_printConstLiveQuery: Socket opened');
         }
@@ -288,13 +288,13 @@ class LiveQueryClient {
         _handleMessage(message);
       }, onDone: () {
         _clientEventStreamController.sink
-            .add(LiveQueryClientEvent.disconnected);
+            .add(LiveQueryClientEvent.DISCONNECTED);
         if (_debug) {
           print('$_printConstLiveQuery: Done');
         }
       }, onError: (Object error) {
         _clientEventStreamController.sink
-            .add(LiveQueryClientEvent.disconnected);
+            .add(LiveQueryClientEvent.DISCONNECTED);
         if (_debug) {
           print(
               '$_printConstLiveQuery: Error: ${error.runtimeType.toString()}');
@@ -307,7 +307,7 @@ class LiveQueryClient {
       });
     } on Exception catch (e) {
       _connecting = false;
-      _clientEventStreamController.sink.add(LiveQueryClientEvent.disconnected);
+      _clientEventStreamController.sink.add(LiveQueryClientEvent.DISCONNECTED);
       if (_debug) {
         print('$_printConstLiveQuery: Error: ${e.toString()}');
       }
@@ -390,12 +390,12 @@ class LiveQueryClient {
 
     Subscription? subscription;
     if (actionData.containsKey('op') && actionData['op'] == 'connected') {
-      print('Re subscription:$_requestSubscription');
+      print('ReSubScription:$_requestSubscription');
 
-      _requestSubscription.values.toList().forEach((Subscription subscription) {
-        _subscribeLiveQuery(subscription);
+      _requestSubscription.values.toList().forEach((Subscription subcription) {
+        _subscribeLiveQuery(subcription);
       });
-      _clientEventStreamController.sink.add(LiveQueryClientEvent.connected);
+      _clientEventStreamController.sink.add(LiveQueryClientEvent.CONNECTED);
       return;
     }
     if (actionData.containsKey('requestId')) {

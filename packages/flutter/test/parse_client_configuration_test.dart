@@ -6,7 +6,6 @@ void main() {
   SharedPreferences.setMockInitialValues(<String, String>{});
 
   test('testBuilder', () async {
-    // arrange
     await Parse().initialize('appId', 'serverUrl',
         clientKey: 'clientKey',
         liveQueryUrl: 'liveQueryUrl',
@@ -18,7 +17,6 @@ void main() {
         fileDirectory: 'someDirectory',
         debug: true);
 
-    // assert
     expect(ParseCoreData().applicationId, 'appId');
     expect(ParseCoreData().serverUrl, 'serverUrl');
     expect(ParseCoreData().clientKey, 'clientKey');

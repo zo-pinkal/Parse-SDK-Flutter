@@ -20,13 +20,13 @@ dynamic parseEncode(dynamic value, {bool full = false}) {
 
   if (value is List) {
     return value.map<dynamic>((dynamic value) {
-      return parseEncode(value, full: full);
+      return parseEncode(value);
     }).toList();
   }
 
   if (value is Map) {
     value.forEach((dynamic k, dynamic v) {
-      value[k] = parseEncode(v, full: full);
+      value[k] = parseEncode(v);
     });
   }
 

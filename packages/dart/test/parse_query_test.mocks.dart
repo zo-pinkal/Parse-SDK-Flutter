@@ -29,7 +29,6 @@ class MockParseClient extends _i1.Mock implements _i2.ParseClient {
   @override
   _i2.ParseCoreData get data => (super.noSuchMethod(Invocation.getter(#data),
       returnValue: _FakeParseCoreData()) as _i2.ParseCoreData);
-
   @override
   _i3.Future<_i2.ParseNetworkResponse> get(String? path,
           {_i2.ParseNetworkOptions? options,
@@ -40,7 +39,6 @@ class MockParseClient extends _i1.Mock implements _i2.ParseClient {
               returnValue: Future<_i2.ParseNetworkResponse>.value(
                   _FakeParseNetworkResponse()))
           as _i3.Future<_i2.ParseNetworkResponse>);
-
   @override
   _i3.Future<_i2.ParseNetworkResponse> put(String? path,
           {String? data, _i2.ParseNetworkOptions? options}) =>
@@ -49,7 +47,6 @@ class MockParseClient extends _i1.Mock implements _i2.ParseClient {
               returnValue: Future<_i2.ParseNetworkResponse>.value(
                   _FakeParseNetworkResponse()))
           as _i3.Future<_i2.ParseNetworkResponse>);
-
   @override
   _i3.Future<_i2.ParseNetworkResponse> post(String? path,
           {String? data, _i2.ParseNetworkOptions? options}) =>
@@ -58,26 +55,22 @@ class MockParseClient extends _i1.Mock implements _i2.ParseClient {
           returnValue: Future<_i2.ParseNetworkResponse>.value(
               _FakeParseNetworkResponse())) as _i3
           .Future<_i2.ParseNetworkResponse>);
-
   @override
   _i3.Future<_i2.ParseNetworkResponse> postBytes(String? path,
           {_i3.Stream<List<int>>? data,
           _i2.ParseNetworkOptions? options,
-          _i2.ProgressCallback? onSendProgress,
-          dynamic cancelToken}) =>
+          _i2.ProgressCallback? onSendProgress}) =>
       (super.noSuchMethod(
               Invocation.method(#postBytes, [
                 path
               ], {
                 #data: data,
                 #options: options,
-                #onSendProgress: onSendProgress,
-                #cancelToken: cancelToken
+                #onSendProgress: onSendProgress
               }),
               returnValue: Future<_i2.ParseNetworkResponse>.value(
                   _FakeParseNetworkResponse()))
           as _i3.Future<_i2.ParseNetworkResponse>);
-
   @override
   _i3.Future<_i2.ParseNetworkResponse> delete(String? path,
           {_i2.ParseNetworkOptions? options}) =>
@@ -86,20 +79,13 @@ class MockParseClient extends _i1.Mock implements _i2.ParseClient {
               returnValue: Future<_i2.ParseNetworkResponse>.value(
                   _FakeParseNetworkResponse()))
           as _i3.Future<_i2.ParseNetworkResponse>);
-
   @override
   _i3.Future<_i2.ParseNetworkByteResponse> getBytes(String? path,
           {_i2.ParseNetworkOptions? options,
-          _i2.ProgressCallback? onReceiveProgress,
-          dynamic cancelToken}) =>
+          _i2.ProgressCallback? onReceiveProgress}) =>
       (super.noSuchMethod(
-              Invocation.method(#getBytes, [
-                path
-              ], {
-                #options: options,
-                #onReceiveProgress: onReceiveProgress,
-                #cancelToken: cancelToken
-              }),
+              Invocation.method(#getBytes, [path],
+                  {#options: options, #onReceiveProgress: onReceiveProgress}),
               returnValue: Future<_i2.ParseNetworkByteResponse>.value(
                   _FakeParseNetworkByteResponse()))
           as _i3.Future<_i2.ParseNetworkByteResponse>);

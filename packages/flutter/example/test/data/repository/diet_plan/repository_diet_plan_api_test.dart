@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../repository_mock_utils.dart';
 
+// ignore_for_file: invalid_use_of_protected_member
 void main() {
   DietPlanProviderContract repository;
   SharedPreferences.setMockInitialValues(<String, String>{});
@@ -31,22 +32,23 @@ void main() {
     });
 
     test('add DietPlan from API', () async {
-      // arrange
+      // Given
       final DietPlan expected = getDummyDietPlan();
       expected['objectId'] = null;
 
-      // act
+      // When
       final ApiResponse response = await repository.add(expected);
       final DietPlan actual = response.result;
 
+      // CLEAR FROM DB
       await deleteFromApi(response.results);
 
-      // assert
+      // Then
       expect(actual.protein, expected.protein);
     });
 
     test('addAll DietPlan from API', () async {
-      // arrange
+      // Given
       final List<DietPlan> actual = <DietPlan>[];
       final DietPlan item1 = getDummyDietPlan();
       item1['objectId'] = null;
@@ -57,54 +59,57 @@ void main() {
       item2.protein = 6;
       actual.add(item2);
 
-      // act
+      // When
       final ApiResponse response = await repository.addAll(actual);
       final List<DietPlan> items = response.results;
 
+      // CLEAR FROM DB
       await deleteFromApi(response.results);
 
-      // assert
+      // Then
       expect(response.success, true);
       expect(actual[1].objectId, items[1].objectId);
     });
 
     test('getById DietPlan from API', () async {
-      // arrange
+      // Given
       final DietPlan dummy = getDummyDietPlan();
       dummy['objectId'] = null;
 
-      // act
+      // When
       final ApiResponse response = await repository.add(dummy);
       final DietPlan expected = response.result;
       final ApiResponse updateResponse =
           await repository.getById(expected.objectId);
       final DietPlan actual = updateResponse.result;
 
+      // CLEAR FROM DB
       await deleteFromApi(response.results);
       await deleteFromApi(updateResponse.results);
 
-      // assert
+      // Then
       expect(actual.objectId, expected.objectId);
       expect(actual.protein, expected.protein);
     });
 
     test('getNewerThan DietPlan from API', () async {
-      // arrange
+      // Given
       final DietPlan dummy = getDummyDietPlan();
       dummy['objectId'] = null;
 
-      // act
+      // When
       final ApiResponse baseResponse = await repository.add(dummy);
       final ApiResponse responseWithResult = await repository
           .getNewerThan(DateTime.now().subtract(const Duration(days: 1)));
       final ApiResponse responseWithoutResult = await repository
           .getNewerThan(DateTime.now().add(const Duration(days: 1)));
 
+      // CLEAR FROM DB
       await deleteFromApi(baseResponse.results);
       await deleteFromApi(responseWithoutResult.results);
       await deleteFromApi(responseWithResult.results);
 
-      // assert
+      // Then
       expect(responseWithResult.success, true);
       expect(responseWithoutResult.success, true);
       expect(responseWithResult.result, isNotNull);
@@ -112,7 +117,6 @@ void main() {
     });
 
     test('getAll DietPlan from API', () async {
-      // arrange
       final List<DietPlan> actual = <DietPlan>[];
 
       final DietPlan item1 = getDummyDietPlan();
@@ -124,38 +128,40 @@ void main() {
       item2.protein = 6;
       actual.add(item2);
 
-      // act
+      // When
       final ApiResponse response = await repository.addAll(actual);
 
+      // CLEAR FROM DB
       await deleteFromApi(response.results);
 
-      // assert
+      // Then
       expect(response.success, true);
       expect(response.result, isNotNull);
     });
 
     test('update DietPlan from API', () async {
-      // arrange
+      // Given
       final DietPlan expected = getDummyDietPlan();
       expected['objectId'] = null;
       final ApiResponse response = await repository.add(expected);
       final DietPlan initialResponse = response.result;
 
-      // act
+      // When
       initialResponse.protein = 10;
       final ApiResponse updateResponse =
           await repository.update(initialResponse);
       final DietPlan actual = updateResponse.result;
 
+      // CLEAR FROM DB
       await deleteFromApi(response.results);
       await deleteFromApi(updateResponse.results);
 
-      // assert
+      // Then
       expect(actual.protein, 10);
     });
 
     test('updateAll DietPlan from API', () async {
-      // arrange
+      // Given
       final List<DietPlan> actual = <DietPlan>[];
 
       final DietPlan item1 = getDummyDietPlan();
@@ -168,15 +174,16 @@ void main() {
       actual.add(item2);
       await repository.addAll(actual);
 
-      // act
+      // When
       item1.protein = 9;
       item2.protein = 10;
       final ApiResponse updateResponse = await repository.updateAll(actual);
       final List<DietPlan> updated = updateResponse.results;
 
+      // CLEAR FROM DB
       await deleteFromApi(updateResponse.results);
 
-      // assert
+      // Then
       expect(updated[0].protein, 9);
       expect(updated[1].protein, 10);
     });

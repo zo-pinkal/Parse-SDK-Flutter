@@ -68,73 +68,65 @@ void main() {
   });
 
   test('add DietPlan from DB', () async {
-    // arrange & act
-    when(() {
-      if (any) {
-        repository.add(any);
-        verify(dbRepository.add(any)).called(1);
-        verify(apiRepository.add(any)).called(1);
-      }
-    });
+    // Given && When
+    await repository.add(any);
+
+    // Then
+    verify(dbRepository.add(any)).called(1);
+    verify(apiRepository.add(any)).called(1);
   });
 
   test('addAll DietPlan from DB', () async {
-    // arrange & act
-    when(() {
-      if (any) {
-        repository.addAll(any);
-        verify(dbRepository.add(any)).called(1);
-        verify(apiRepository.add(any)).called(1);
-      }
-    });
+    // Given && When
+    await repository.addAll(any);
+
+    // Then
+    verify(dbRepository.addAll(any)).called(1);
+    verify(apiRepository.addAll(any)).called(1);
   });
 
   test('getAll DietPlan from DB', () async {
-    // arrange & act
+    // Given && When
     await repository.getAll();
 
-    // assert
+    // Then
     verify(dbRepository.getAll()).called(1);
     verifyNever(apiRepository.getAll());
   });
 
   test('getAll DietPlan from API', () async {
-    // arrange & act
+    // Given && When
     await repository.getAll(fromApi: true);
 
-    // assert
+    // Then
     verifyNever(dbRepository.getAll());
     verify(apiRepository.getAll()).called(1);
   });
 
   test('getNewerThan DietPlan from DB', () async {
-    // arrange & act
+    // Given && When
     await repository.getNewerThan(DateTime.now());
 
-    // assert
+    // Then
     verifyNever(dbRepository.getNewerThan(DateTime.now()));
     verify(apiRepository.getNewerThan(any));
   });
 
   test('updateAll DietPlan from DB', () async {
-    // arrange & act
-    when(() {
-      if (any) {
-        repository.updateAll(any);
-        verify(dbRepository.updateAll(any)).called(1);
-        verify(apiRepository.updateAll(any)).called(1);
-      }
-    });
+    // Given && When
+    await repository.updateAll(any);
+
+    // Then
+    verify(dbRepository.updateAll(any)).called(1);
+    verify(apiRepository.updateAll(any)).called(1);
   });
 
   test('delete DietPlan from DB', () async {
-    // arrange & act
-    when(() {
-      if (any) {
-        repository.remove(any);
-        verify(dbRepository.remove(any)).called(1);
-        verify(apiRepository.remove(any)).called(1);
-      }
-    });
+    // Given && When
+    await repository.remove(any);
+
+    // Then
+    verify(dbRepository.remove(any)).called(1);
+    verify(apiRepository.remove(any)).called(1);
   });
 }

@@ -40,7 +40,6 @@ class ParseHTTPClient extends ParseClient {
     String path, {
     ParseNetworkOptions? options,
     ProgressCallback? onReceiveProgress,
-    dynamic cancelToken,
   }) async {
     final http.Response response = await _client.get(
       Uri.parse(path),
@@ -86,7 +85,6 @@ class ParseHTTPClient extends ParseClient {
     Stream<List<int>>? data,
     ParseNetworkOptions? options,
     ProgressCallback? onSendProgress,
-    dynamic cancelToken,
   }) async {
     final http.Response response = await _client.post(
       Uri.parse(path),

@@ -57,7 +57,14 @@ class ParseLiveGridWidget<T extends sdk.ParseObject> extends StatefulWidget {
   final double childAspectRatio;
 
   @override
-  _ParseLiveGridWidgetState<T> createState() => _ParseLiveGridWidgetState<T>();
+  _ParseLiveGridWidgetState<T> createState() => _ParseLiveGridWidgetState<T>(
+        query: query,
+        removedItemBuilder: removedItemBuilder,
+        listenOnAllSubItems: listenOnAllSubItems,
+        listeningIncludes: listeningIncludes,
+        lazyLoading: lazyLoading,
+        preloadedColumns: preloadedColumns,
+      );
 
   static Widget defaultChildBuilder<T extends sdk.ParseObject>(
       BuildContext context, sdk.ParseLiveListElementSnapshot<T> snapshot) {
@@ -81,17 +88,19 @@ class ParseLiveGridWidget<T extends sdk.ParseObject> extends StatefulWidget {
 
 class _ParseLiveGridWidgetState<T extends sdk.ParseObject>
     extends State<ParseLiveGridWidget<T>> {
-  sdk.ParseLiveList<T>? _liveGrid;
-  bool noData = true;
-
-  @override
-  void initState() {
+  _ParseLiveGridWidgetState(
+      {required this.query,
+      required this.removedItemBuilder,
+      bool? listenOnAllSubItems,
+      List<String>? listeningIncludes,
+      bool lazyLoading = true,
+      List<String>? preloadedColumns}) {
     sdk.ParseLiveList.create(
-      widget.query,
-      listenOnAllSubItems: widget.listenOnAllSubItems,
-      listeningIncludes: widget.listeningIncludes,
-      lazyLoading: widget.lazyLoading,
-      preloadedColumns: widget.preloadedColumns,
+      query,
+      listenOnAllSubItems: listenOnAllSubItems,
+      listeningIncludes: listeningIncludes,
+      lazyLoading: lazyLoading,
+      preloadedColumns: preloadedColumns,
     ).then((sdk.ParseLiveList<T> value) {
       if (value.size > 0) {
         setState(() {
@@ -112,9 +121,12 @@ class _ParseLiveGridWidgetState<T extends sdk.ParseObject>
         });
       });
     });
-
-    super.initState();
   }
+
+  final sdk.QueryBuilder<T> query;
+  sdk.ParseLiveList<T>? _liveGrid;
+  final ChildBuilder<T>? removedItemBuilder;
+  bool noData = true;
 
   @override
   Widget build(BuildContext context) {

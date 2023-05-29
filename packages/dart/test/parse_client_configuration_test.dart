@@ -3,7 +3,6 @@ import 'package:test/test.dart';
 
 void main() {
   test('testBuilder', () async {
-    // arrange
     await Parse().initialize(
       'appId',
       'serverUrl',
@@ -18,7 +17,6 @@ void main() {
       debug: true,
     );
 
-    // assert
     expect(ParseCoreData().applicationId, 'appId');
     expect(ParseCoreData().serverUrl, 'serverUrl');
     expect(ParseCoreData().clientKey, 'clientKey');
